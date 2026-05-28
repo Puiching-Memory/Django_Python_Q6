@@ -1,0 +1,2 @@
+# Django_Python_Q6
+基于Django的校园二手交易购物平台设计与实现 第6学年
