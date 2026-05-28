@@ -1,0 +1,46 @@
+{% extends "Shop/Base.html" %}
+
+{% block Title %}订单提交 - 校园二手交易购物平台{% endblock %}
+
+{% block Content %}
+<section class="PageTitle">
+    <p class="Eyebrow">Checkout</p>
+    <h1>订单提交</h1>
+    <p>确认已选商品列表、填写订单信息并选择支付方式。</p>
+</section>
+
+<section class="CheckoutLayout">
+    <div class="CheckoutItems">
+        <h2>已选商品</h2>
+        {% for Item in CartItems %}
+            <div class="CheckoutItem">
+                <div>
+                    <strong>{{ Item.Product.Name }}</strong>
+                    <span>{{ Item.Product.Category.Name }} / {{ Item.Product.Condition }}</span>
+                </div>
+                <div>￥{{ Item.Product.Price }} x {{ Item.Quantity }}</div>
+                <strong>￥{{ Item.Subtotal }}</strong>
+            </div>
+        {% endfor %}
+        <div class="CheckoutTotal">
+            <span>应付金额</span>
+            <strong>￥{{ TotalAmount }}</strong>
+        </div>
+    </div>
+
+    <form class="OrderForm" method="post">
+        {% csrf_token %}
+        <h2>订单信息</h2>
+        {% for Field in Form %}
+            <div class="FormRow {% if Field.field.widget.input_type == 'radio' %}RadioRow{% endif %}">
+                <label>{{ Field.label }}</label>
+                {{ Field }}
+                {% for Error in Field.errors %}
+                    <span class="FormError">{{ Error }}</span>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        <button class="PrimaryButton FullButton" type="submit">确认提交订单</button>
+    </form>
+</section>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% load static %}
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block Title %}校园二手交易购物平台{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/Shop.css' %}">
+</head>
+<body>
+    <header class="SiteHeader">
+        <nav class="TopBar">
+            <a class="Brand" href="{% url 'Shop:ProductList' %}">校园二手交易购物平台</a>
+            <div class="NavLinks">
+                <a href="{% url 'Shop:ProductList' %}">商品展示</a>
+                {% for Category in NavigationCategories %}
+                    <a href="{{ Category.GetAbsoluteUrl }}">{{ Category.Name }}</a>
+                {% endfor %}
+                <a class="CartLink" href="{% url 'Shop:Cart' %}">购物车 <span>{{ CartCount }}</span></a>
+            </div>
+        </nav>
+    </header>
+
+    {% if messages %}
+        <div class="MessageWrap">
+            {% for Message in messages %}
+                <div class="Message {{ Message.tags }}">{{ Message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <main>
+        {% block Content %}{% endblock %}
+    </main>
+
+    <footer class="SiteFooter">
+        <p>基于 Django 的校园二手交易购物平台设计与实现</p>
+    </footer>
+</body>
+</html>

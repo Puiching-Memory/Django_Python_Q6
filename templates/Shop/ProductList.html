@@ -1,0 +1,61 @@
+{% extends "Shop/Base.html" %}
+
+{% block Title %}商品展示 - 校园二手交易购物平台{% endblock %}
+
+{% block Content %}
+<section class="HeroBand">
+    <div class="HeroContent">
+        <div>
+            <p class="Eyebrow">Campus Secondhand Market</p>
+            <h1>校园二手交易购物平台</h1>
+            <p class="HeroText">展示校园闲置商品分类与最新发布商品，支持查看详情、加入购物车和提交订单。</p>
+            <a class="PrimaryButton" href="{% url 'Shop:Cart' %}">查看购物车</a>
+        </div>
+        <div class="HeroStats">
+            <div>
+                <strong>{{ Categories|length }}</strong>
+                <span>商品分类</span>
+            </div>
+            <div>
+                <strong>{{ NewestProducts|length }}</strong>
+                <span>最新商品</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="PageSection">
+    <div class="SectionHeader">
+        <div>
+            <p class="Eyebrow">Category</p>
+            <h2>商品分类</h2>
+        </div>
+    </div>
+    <div class="CategoryGrid">
+        {% for Category in Categories %}
+            <a class="CategoryCard" href="{{ Category.GetAbsoluteUrl }}">
+                <span>{{ Category.Name }}</span>
+                <p>{{ Category.Description }}</p>
+            </a>
+        {% empty %}
+            <p class="EmptyText">暂无商品分类。</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="PageSection">
+    <div class="SectionHeader">
+        <div>
+            <p class="Eyebrow">Newest</p>
+            <h2>最新商品展示</h2>
+        </div>
+    </div>
+    <div class="ProductGrid">
+        {% for Product in NewestProducts %}
+            {% include "Shop/ProductCard.html" with Product=Product %}
+        {% empty %}
+            <p class="EmptyText">暂无商品。</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

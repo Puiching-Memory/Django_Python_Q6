@@ -1,0 +1,22 @@
+{% load static %}
+<article class="ProductCard">
+    <a class="ProductImageLink" href="{{ Product.GetAbsoluteUrl }}" aria-label="{{ Product.Name }}">
+        <img src="{% static 'images/' %}{{ Product.ImageName }}" alt="{{ Product.Name }}">
+    </a>
+    <div class="ProductCardBody">
+        <div class="ProductMeta">
+            <span>{{ Product.Category.Name }}</span>
+            <span>{{ Product.Condition }}</span>
+        </div>
+        <h3><a href="{{ Product.GetAbsoluteUrl }}">{{ Product.Name }}</a></h3>
+        <p>{{ Product.Description|truncatechars:42 }}</p>
+        <div class="ProductBottom">
+            <strong>￥{{ Product.Price }}</strong>
+            <form method="post" action="{% url 'Shop:CartAdd' Product.id %}">
+                {% csrf_token %}
+                <input type="hidden" name="Next" value="{{ request.path }}">
+                <button class="SmallButton" type="submit">加入购物车</button>
+            </form>
+        </div>
+    </div>
+</article>

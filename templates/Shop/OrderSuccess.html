@@ -1,0 +1,61 @@
+{% extends "Shop/Base.html" %}
+
+{% block Title %}订单提交成功 - 校园二手交易购物平台{% endblock %}
+
+{% block Content %}
+<section class="SuccessHero">
+    <p class="Eyebrow">Success</p>
+    <h1>订单提交成功</h1>
+    <p>订单编号：{{ Order.OrderNumber }}</p>
+</section>
+
+<section class="CheckoutLayout">
+    <div class="CheckoutItems">
+        <h2>订单商品信息</h2>
+        {% for Item in OrderItems %}
+            <div class="CheckoutItem">
+                <div>
+                    <strong>{{ Item.ProductName }}</strong>
+                    <span>单价 ￥{{ Item.UnitPrice }}</span>
+                </div>
+                <div>x {{ Item.Quantity }}</div>
+                <strong>￥{{ Item.Subtotal }}</strong>
+            </div>
+        {% endfor %}
+        <div class="CheckoutTotal">
+            <span>统计商品金额</span>
+            <strong>￥{{ Order.TotalAmount }}</strong>
+        </div>
+    </div>
+
+    <div class="OrderSummary">
+        <h2>订单信息</h2>
+        <dl class="InfoList">
+            <div>
+                <dt>收货人</dt>
+                <dd>{{ Order.ReceiverName }}</dd>
+            </div>
+            <div>
+                <dt>联系电话</dt>
+                <dd>{{ Order.Phone }}</dd>
+            </div>
+            <div>
+                <dt>收货地址</dt>
+                <dd>{{ Order.Address }}</dd>
+            </div>
+            <div>
+                <dt>支付方式</dt>
+                <dd>{{ Order.PaymentMethodText }}</dd>
+            </div>
+            <div>
+                <dt>提交时间</dt>
+                <dd>{{ Order.CreatedAt|date:"Y-m-d H:i" }}</dd>
+            </div>
+        </dl>
+        {% if Order.Remark %}
+            <p class="Remark">备注：{{ Order.Remark }}</p>
+        {% endif %}
+        <a class="PrimaryButton FullButton" href="{% url 'Shop:ProductList' %}">返回商品展示</a>
+    </div>
+</section>
+{% endblock %}

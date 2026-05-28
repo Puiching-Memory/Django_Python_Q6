@@ -1,0 +1,28 @@
+{% extends "Shop/Base.html" %}
+
+{% block Title %}{{ Category.Name }} - 商品分类展示{% endblock %}
+
+{% block Content %}
+<section class="PageTitle">
+    <p class="Eyebrow">Category</p>
+    <h1>{{ Category.Name }}</h1>
+    <p>{{ Category.Description }}</p>
+</section>
+
+<section class="PageSection">
+    <div class="SectionHeader">
+        <div>
+            <p class="Eyebrow">All Products</p>
+            <h2>全部商品</h2>
+        </div>
+        <a class="TextButton" href="{% url 'Shop:ProductList' %}">返回商品展示</a>
+    </div>
+    <div class="ProductGrid">
+        {% for Product in Products %}
+            {% include "Shop/ProductCard.html" with Product=Product %}
+        {% empty %}
+            <p class="EmptyText">该分类暂无商品。</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

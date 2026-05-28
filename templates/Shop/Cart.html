@@ -1,0 +1,58 @@
+{% extends "Shop/Base.html" %}
+
+{% block Title %}购物车 - 校园二手交易购物平台{% endblock %}
+
+{% block Content %}
+<section class="PageTitle">
+    <p class="Eyebrow">Cart</p>
+    <h1>购物车</h1>
+    <p>查看已加入购物车的商品，统计金额并删除不需要的物品。</p>
+</section>
+
+<section class="TableSection">
+    {% if CartItems %}
+        <div class="ResponsiveTable">
+            <table>
+                <thead>
+                    <tr>
+                        <th>商品</th>
+                        <th>分类</th>
+                        <th>单价</th>
+                        <th>数量</th>
+                        <th>小计</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for Item in CartItems %}
+                        <tr>
+                            <td><a href="{{ Item.Product.GetAbsoluteUrl }}">{{ Item.Product.Name }}</a></td>
+                            <td>{{ Item.Product.Category.Name }}</td>
+                            <td>￥{{ Item.Product.Price }}</td>
+                            <td>{{ Item.Quantity }}</td>
+                            <td>￥{{ Item.Subtotal }}</td>
+                            <td>
+                                <form method="post" action="{% url 'Shop:CartRemove' Item.Product.id %}">
+                                    {% csrf_token %}
+                                    <button class="DangerButton" type="submit">删除</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="SummaryBar">
+            <span>商品金额合计</span>
+            <strong>￥{{ TotalAmount }}</strong>
+            <a class="PrimaryButton" href="{% url 'Shop:Checkout' %}">提交订单</a>
+        </div>
+    {% else %}
+        <div class="EmptyPanel">
+            <h2>购物车为空</h2>
+            <p>请先从商品展示页选择需要购买的二手商品。</p>
+            <a class="PrimaryButton" href="{% url 'Shop:ProductList' %}">去选择商品</a>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
+  <rect width="640" height="480" fill="#e0f2fe"/>
+  <rect x="182" y="76" width="276" height="328" rx="18" fill="#2563eb"/>
+  <rect x="210" y="106" width="220" height="268" rx="10" fill="#f8fafc"/>
+  <text x="320" y="202" text-anchor="middle" font-family="Arial, sans-serif" font-size="42" font-weight="700" fill="#1e3a8a">Python</text>
+  <text x="320" y="252" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" fill="#334155">编程教材</text>
+  <rect x="242" y="294" width="156" height="12" rx="6" fill="#60a5fa"/>
+</svg>
