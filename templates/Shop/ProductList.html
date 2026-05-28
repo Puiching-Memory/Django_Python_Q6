@@ -9,7 +9,10 @@
             <p class="Eyebrow">Campus Secondhand Market</p>
             <h1>校园二手交易购物平台</h1>
             <p class="HeroText">展示校园闲置商品分类与最新发布商品，支持查看详情、加入购物车和提交订单。</p>
-            <a class="PrimaryButton" href="{% url 'Shop:Cart' %}">查看购物车</a>
+            <div class="HeroActions">
+                <a class="PrimaryButton" href="{% url 'Shop:ShoppingAssistant' %}">体验Agent购物助手</a>
+                <a class="TextButton" href="{% url 'Shop:Cart' %}">查看购物车</a>
+            </div>
         </div>
         <div class="HeroStats">
             <div>

@@ -7,6 +7,7 @@ app_name = "Shop"
 
 urlpatterns = [
     path("", views.ProductListView, name="ProductList"),
+    path("assistant/", views.ShoppingAssistantView, name="ShoppingAssistant"),
     path("category/<slug:Slug>/", views.CategoryDetailView, name="CategoryDetail"),
     path("product/<int:ProductId>/", views.ProductDetailView, name="ProductDetail"),
     path("cart/", views.CartView, name="Cart"),

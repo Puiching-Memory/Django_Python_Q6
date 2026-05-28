@@ -15,14 +15,38 @@
 
 自定义功能：后台管理、示例商品数据、订单编号生成、同类商品推荐、消息提示。
 
-## 运行方式
+## DeepSeek Agent 配置
 
-### 方式一：本地运行
+购物助手通过 LangGraph 编排工具节点，并可读取 `.env` 调用 DeepSeek API 生成回复。首次运行前复制示例配置：
 
 ```powershell
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py runserver
+copy .env.example .env
+```
+
+然后在 `.env` 中填写：
+
+```env
+DEEPSEEK_API_KEY=sk-your-deepseek-api-key
+DEEPSEEK_API_BASE_URL=https://api.deepseek.com
+DEEPSEEK_MODEL=deepseek-v4-flash
+DEEPSEEK_THINKING_TYPE=disabled
+DEEPSEEK_REASONING_EFFORT=high
+DEEPSEEK_TIMEOUT_SECONDS=15
+```
+
+DeepSeek V4 当前推荐模型为 `deepseek-v4-flash` 或 `deepseek-v4-pro`，旧的 `deepseek-chat` / `deepseek-reasoner` 将于 2026-07-24 停用。购物助手默认使用 `deepseek-v4-flash` 的 non-thinking 模式；如需推理模式，可将 `DEEPSEEK_THINKING_TYPE` 改为 `enabled`。
+
+未配置 `DEEPSEEK_API_KEY` 时，购物助手会自动使用本地规则推荐兜底。
+
+## 运行方式
+
+### 方式一：本地运行与测试（uv）
+
+```powershell
+uv sync
+uv run python manage.py migrate
+uv run python manage.py check
+uv run python manage.py runserver
 ```
 
 打开浏览器访问：
@@ -31,19 +55,24 @@ python manage.py runserver
 http://127.0.0.1:8000/
 ```
 
-如果使用 `uv`，可执行：
+常用管理命令也通过 `uv run` 执行：
 
 ```powershell
-uv run --with django python manage.py migrate
-uv run --with django python manage.py runserver
+uv run python manage.py createsuperuser
 ```
 
-### 方式二：Docker 部署
+### 方式二：线上/容器测试（Docker）
 
 项目已内置 Dockerfile 和 docker-compose.yml，可通过 Docker 一键启动：
 
 ```powershell
-# 构建镜像并启动容器
+# 构建镜像
+docker compose build
+
+# 容器环境检查
+docker compose run --rm web python manage.py check
+
+# 启动容器
 docker compose up --build
 
 # 后台运行
@@ -77,5 +106,5 @@ docs/                   课程任务文档和考核报告
 项目已注册分类、商品、订单和订单明细模型。可创建管理员账号后登录后台维护数据：
 
 ```powershell
-python manage.py createsuperuser
+uv run python manage.py createsuperuser
 ```

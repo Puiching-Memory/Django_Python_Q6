@@ -1,0 +1,123 @@
+{% extends "Shop/Base.html" %}
+{% load static %}
+
+{% block Title %}Agent购物助手 - 校园二手交易购物平台{% endblock %}
+
+{% block Content %}
+<section class="PageTitle">
+    <p class="Eyebrow">Shopping Agent</p>
+    <h1>Agent购物助手</h1>
+    <p>基于 LangGraph 构建真实 Agent 工作流，输入预算、用途或想买的商品后，助手会调用商品库和购物车工具生成推荐。</p>
+</section>
+
+<section class="AssistantLayout">
+    <div class="AssistantPanel">
+        <h2>告诉助手你的需求</h2>
+        <form class="AssistantForm" method="post">
+            {% csrf_token %}
+            <label for="Question">购物需求</label>
+            <textarea id="Question" name="Question" maxlength="160" rows="4" placeholder="例如：预算100元，想买自习和编程用的数码产品">{{ Question }}</textarea>
+            <div class="AssistantActions">
+                <button class="PrimaryButton" type="submit">生成推荐</button>
+                <button class="TextButton" type="submit" name="Action" value="Clear">清空对话</button>
+            </div>
+        </form>
+
+        <div class="PromptExamples">
+            <span>试试这样问：</span>
+            <p>预算50元以内，想买宿舍生活用品</p>
+            <p>想要期末复习用的学习资料</p>
+            <p>推荐适合运动课的二手商品</p>
+        </div>
+
+        {% if AssistantHistory %}
+            <div class="AssistantChat">
+                {% for Message in AssistantHistory %}
+                    <div class="ChatBubble {{ Message.Role }}">
+                        <span>{% if Message.Role == "user" %}我{% else %}助手{% endif %}</span>
+                        <p>{{ Message.Text }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <aside class="AssistantInsight">
+        <p class="Eyebrow">Agent分析</p>
+        <h2>推荐策略</h2>
+        {% if AgentFramework %}
+            <div class="AgentBadge">{{ AgentFramework }}</div>
+        {% endif %}
+        <p>{{ AssistantReply }}</p>
+        {% if AssistantTags %}
+            <div class="AssistantTags">
+                {% for Tag in AssistantTags %}
+                    <span>{{ Tag }}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if AgentTools %}
+            <div class="AgentTools">
+                <strong>已启用工具</strong>
+                {% for Tool in AgentTools %}
+                    <span>{{ Tool }}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if AgentTrace %}
+            <div class="AgentTrace">
+                <strong>执行轨迹</strong>
+                <ol>
+                    {% for Trace in AgentTrace %}
+                        <li>{{ Trace }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+        {% endif %}
+        <a class="TextButton FullButton" href="{% url 'Shop:Cart' %}">查看购物车</a>
+    </aside>
+</section>
+
+<section class="PageSection">
+    <div class="SectionHeader">
+        <div>
+            <p class="Eyebrow">Recommended</p>
+            <h2>助手推荐商品</h2>
+        </div>
+    </div>
+
+    {% if Recommendations %}
+        <div class="AssistantProductGrid">
+            {% for Item in Recommendations %}
+                <article class="AssistantProductCard">
+                    <a class="ProductImageLink" href="{{ Item.Product.GetAbsoluteUrl }}" aria-label="{{ Item.Product.Name }}">
+                        <img src="{% static 'images/' %}{{ Item.Product.ImageName }}" alt="{{ Item.Product.Name }}">
+                    </a>
+                    <div class="AssistantProductBody">
+                        <div class="ProductMeta">
+                            <span>{{ Item.Product.Category.Name }}</span>
+                            <span>Agent评分 {{ Item.Score }}</span>
+                        </div>
+                        <h3><a href="{{ Item.Product.GetAbsoluteUrl }}">{{ Item.Product.Name }}</a></h3>
+                        <p class="AssistantReason">{{ Item.Reason }}</p>
+                        <p>{{ Item.Product.Description|truncatechars:52 }}</p>
+                        <div class="ProductBottom">
+                            <strong>￥{{ Item.Product.Price }}</strong>
+                            <form method="post" action="{% url 'Shop:CartAdd' Item.Product.id %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="Next" value="{% url 'Shop:ShoppingAssistant' %}">
+                                <button class="SmallButton" type="submit">加入购物车</button>
+                            </form>
+                        </div>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="EmptyPanel">
+            <h2>暂无推荐商品</h2>
+            <p>请换一个预算、用途或商品类别再试。</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

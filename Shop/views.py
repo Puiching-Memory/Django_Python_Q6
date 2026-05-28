@@ -8,9 +8,11 @@ from django.views.decorators.http import require_POST
 
 from .forms import CheckoutForm
 from .models import Category, Order, OrderItem, Product
+from .shopping_agent import RunShoppingAssistantAgent
 
 
 CartSessionKey = "CampusSecondhandCart"
+AssistantSessionKey = "CampusSecondhandAssistant"
 
 
 def GetCart(request):
@@ -44,6 +46,15 @@ def BuildCartItems(cart):
     return items, total
 
 
+def GetAssistantHistory(request):
+    return request.session.get(AssistantSessionKey, [])
+
+
+def SaveAssistantHistory(request, history):
+    request.session[AssistantSessionKey] = history[-8:]
+    request.session.modified = True
+
+
 def ProductListView(request):
     categories = Category.objects.prefetch_related("Products")
     newest_products = Product.objects.select_related("Category")[:8]
@@ -53,6 +64,43 @@ def ProductListView(request):
         {
             "Categories": categories,
             "NewestProducts": newest_products,
+        },
+    )
+
+
+def ShoppingAssistantView(request):
+    question = ""
+    if request.method == "POST" and request.POST.get("Action") == "Clear":
+        SaveAssistantHistory(request, [])
+        return redirect("Shop:ShoppingAssistant")
+
+    if request.method == "POST":
+        question = request.POST.get("Question", "").strip()[:160]
+        if not question:
+            messages.warning(request, "请输入预算、用途或想购买的商品。")
+
+    plan = RunShoppingAssistantAgent(question, GetCart(request))
+    history = GetAssistantHistory(request)
+    if request.method == "POST" and question:
+        history = history + [
+            {"Role": "user", "Text": question},
+            {"Role": "assistant", "Text": plan["Reply"]},
+        ]
+        SaveAssistantHistory(request, history)
+        history = GetAssistantHistory(request)
+
+    return render(
+        request,
+        "Shop/ShoppingAssistant.html",
+        {
+            "Question": question,
+            "AssistantReply": plan["Reply"],
+            "AssistantTags": plan["Tags"],
+            "Recommendations": plan["Recommendations"],
+            "AssistantHistory": history,
+            "AgentTrace": plan["Trace"],
+            "AgentTools": plan["Tools"],
+            "AgentFramework": plan["Framework"],
         },
     )
 
@@ -90,7 +138,10 @@ def ProductDetailView(request, ProductId):
 @require_POST
 def CartAddView(request, ProductId):
     product = get_object_or_404(Product, pk=ProductId)
-    quantity = int(request.POST.get("Quantity", 1))
+    try:
+        quantity = int(request.POST.get("Quantity", 1))
+    except (TypeError, ValueError):
+        quantity = 1
     quantity = max(1, min(quantity, product.Stock))
     cart = GetCart(request)
     current_quantity = int(cart.get(str(product.pk), 0))

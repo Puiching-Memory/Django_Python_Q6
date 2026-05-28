@@ -1,12 +1,32 @@
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-campus-secondhand-shop-coursework")
 DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost,testserver").split(",")
+DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY", "")
+DEEPSEEK_API_BASE_URL = os.environ.get(
+    "DEEPSEEK_API_BASE_URL",
+    os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com"),
+).rstrip("/")
+DEEPSEEK_MODEL = os.environ.get("DEEPSEEK_MODEL", "deepseek-v4-flash")
+DEEPSEEK_THINKING_TYPE = os.environ.get("DEEPSEEK_THINKING_TYPE", "disabled").lower()
+if DEEPSEEK_THINKING_TYPE not in {"enabled", "disabled"}:
+    DEEPSEEK_THINKING_TYPE = "disabled"
+DEEPSEEK_REASONING_EFFORT = os.environ.get("DEEPSEEK_REASONING_EFFORT", "high").lower()
+if DEEPSEEK_REASONING_EFFORT not in {"high", "max"}:
+    DEEPSEEK_REASONING_EFFORT = "high"
+
+try:
+    DEEPSEEK_TIMEOUT_SECONDS = float(os.environ.get("DEEPSEEK_TIMEOUT_SECONDS", "15"))
+except ValueError:
+    DEEPSEEK_TIMEOUT_SECONDS = 15.0
 
 if DEBUG:
     CSRF_TRUSTED_ORIGINS = ["http://localhost:8000", "http://127.0.0.1:8000"]

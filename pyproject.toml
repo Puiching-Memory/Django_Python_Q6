@@ -1,0 +1,14 @@
+[project]
+name = "campus-secondhand-shop"
+version = "0.1.0"
+description = "Django campus secondhand shop with a LangGraph shopping assistant"
+requires-python = ">=3.11"
+dependencies = [
+    "Django>=4.2,<6.0",
+    "httpx>=0.28,<1.0",
+    "langgraph>=0.2,<1.0",
+    "python-dotenv>=1.0,<2.0",
+]
+
+[tool.uv]
+package = false

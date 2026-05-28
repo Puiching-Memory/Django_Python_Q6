@@ -633,6 +633,177 @@ td a {
     text-align: center;
 }
 
+.AssistantLayout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 24px;
+    align-items: start;
+    width: min(1180px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0 18px;
+}
+
+.AssistantPanel,
+.AssistantInsight,
+.AssistantProductCard {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--paper);
+    box-shadow: 0 12px 28px rgba(31, 41, 51, 0.06);
+}
+
+.AssistantPanel,
+.AssistantInsight {
+    padding: 24px;
+}
+
+.AssistantForm label,
+.AgentTools strong,
+.AgentTrace strong {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 800;
+}
+
+.AssistantForm textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    resize: vertical;
+    font: inherit;
+}
+
+.AssistantActions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+.PromptExamples {
+    display: grid;
+    gap: 8px;
+    margin-top: 18px;
+    color: var(--muted);
+}
+
+.PromptExamples span {
+    color: var(--ink);
+    font-weight: 800;
+}
+
+.PromptExamples p {
+    margin: 0;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: var(--soft);
+}
+
+.AssistantChat {
+    display: grid;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.ChatBubble {
+    max-width: 86%;
+    padding: 12px 14px;
+    border-radius: 8px;
+    background: var(--soft);
+}
+
+.ChatBubble.user {
+    justify-self: end;
+    color: #ffffff;
+    background: var(--brand);
+}
+
+.ChatBubble span {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.ChatBubble p,
+.AssistantInsight p,
+.AgentTrace ol {
+    margin-bottom: 0;
+}
+
+.AgentBadge {
+    display: inline-flex;
+    margin: 12px 0;
+    padding: 6px 10px;
+    border-radius: 999px;
+    color: var(--brand-dark);
+    background: #ccfbf1;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.AssistantTags,
+.AgentTools {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+}
+
+.AssistantTags span,
+.AgentTools span {
+    padding: 6px 10px;
+    border-radius: 999px;
+    color: #33515c;
+    background: var(--soft);
+    font-size: 13px;
+}
+
+.AgentTrace {
+    margin: 18px 0;
+    padding: 14px;
+    border: 1px dashed #99d6c8;
+    border-radius: 8px;
+    background: #f0fdfa;
+}
+
+.AgentTrace ol {
+    padding-left: 20px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.AgentTrace li + li {
+    margin-top: 6px;
+}
+
+.AssistantProductGrid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.AssistantProductCard {
+    overflow: hidden;
+}
+
+.AssistantProductBody {
+    padding: 16px;
+}
+
+.AssistantProductBody p {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.AssistantReason {
+    min-height: 44px;
+    color: var(--brand-dark) !important;
+    font-weight: 800;
+}
+
 @media (max-width: 900px) {
     .TopBar {
         align-items: flex-start;
@@ -641,6 +812,7 @@ td a {
     }
 
     .HeroContent,
+    .AssistantLayout,
     .DetailLayout,
     .CheckoutLayout {
         grid-template-columns: 1fr;
@@ -648,7 +820,8 @@ td a {
 
     .CategoryGrid,
     .ProductGrid,
-    .ProductGridCompact {
+    .ProductGridCompact,
+    .AssistantProductGrid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
@@ -670,7 +843,8 @@ td a {
     .HeroStats,
     .CategoryGrid,
     .ProductGrid,
-    .ProductGridCompact {
+    .ProductGridCompact,
+    .AssistantProductGrid {
         grid-template-columns: 1fr;
     }
 

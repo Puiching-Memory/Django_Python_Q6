@@ -13,6 +13,7 @@
             <a class="Brand" href="{% url 'Shop:ProductList' %}">校园二手交易购物平台</a>
             <div class="NavLinks">
                 <a href="{% url 'Shop:ProductList' %}">商品展示</a>
+                <a href="{% url 'Shop:ShoppingAssistant' %}">Agent助手</a>
                 {% for Category in NavigationCategories %}
                     <a href="{{ Category.GetAbsoluteUrl }}">{{ Category.Name }}</a>
                 {% endfor %}
