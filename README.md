@@ -17,6 +17,8 @@
 
 ## 运行方式
 
+### 方式一：本地运行
+
 ```powershell
 pip install -r requirements.txt
 python manage.py migrate
@@ -35,6 +37,29 @@ http://127.0.0.1:8000/
 uv run --with django python manage.py migrate
 uv run --with django python manage.py runserver
 ```
+
+### 方式二：Docker 部署
+
+项目已内置 Dockerfile 和 docker-compose.yml，可通过 Docker 一键启动：
+
+```powershell
+# 构建镜像并启动容器
+docker compose up --build
+
+# 后台运行
+docker compose up --build -d
+
+# 停止容器
+docker compose down
+```
+
+启动后访问：
+
+```text
+http://localhost:8000/
+```
+
+> 说明：容器启动时会自动执行 `migrate`，数据文件 `db.sqlite3` 通过挂载卷持久化到宿主机。
 
 ## 项目结构
 

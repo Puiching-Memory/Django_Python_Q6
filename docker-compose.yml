@@ -1,0 +1,15 @@
+services:
+  web:
+    build: .
+    container_name: campus_secondhand_shop
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - /app/__pycache__
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DJANGO_DEBUG=True
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"

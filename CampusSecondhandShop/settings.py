@@ -1,11 +1,15 @@
+import os
 from pathlib import Path
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "django-insecure-campus-secondhand-shop-coursework"
-DEBUG = True
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "testserver"]
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-campus-secondhand-shop-coursework")
+DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost,testserver").split(",")
+
+if DEBUG:
+    CSRF_TRUSTED_ORIGINS = ["http://localhost:8000", "http://127.0.0.1:8000"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
